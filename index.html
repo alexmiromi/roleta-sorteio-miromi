@@ -41,7 +41,6 @@
     overflow-x: hidden;
   }
 
-  /* Background glow */
   body::before {
     content: '';
     position: fixed;
@@ -255,58 +254,25 @@
   /* ERROR */
   .error-msg { font-size: 0.75rem; color: #ff4d4d; letter-spacing: 1px; min-height: 16px; text-align: center; }
 
-  /* CONTROLES (não repetir + reiniciar) */
-  .controls-row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+  /* CONTROLES */
+  .controls-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .switch {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    cursor: pointer;
-    user-select: none;
-    font-size: 0.72rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: color 0.2s;
+    display: flex; align-items: center; gap: 9px;
+    cursor: pointer; user-select: none;
+    font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); transition: color 0.2s;
   }
   .switch input { display: none; }
-  .switch .track {
-    width: 42px; height: 24px;
-    border-radius: 12px;
-    background: var(--border);
-    position: relative;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-  .switch .track::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: #777;
-    transition: transform 0.2s, background 0.2s;
-  }
+  .switch .track { width: 42px; height: 24px; border-radius: 12px; background: var(--border); position: relative; transition: background 0.2s; flex-shrink: 0; }
+  .switch .track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #777; transition: transform 0.2s, background 0.2s; }
   .switch input:checked + .track { background: var(--accent); }
   .switch input:checked + .track::after { transform: translateX(18px); background: #fff; }
   .switch.on { color: var(--text); }
   .reset-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 0.7rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
     transition: color 0.2s, border-color 0.2s;
   }
   .reset-btn:hover { color: var(--text); border-color: var(--accent); }
@@ -314,18 +280,24 @@
   /* HISTÓRICO */
   .history { width: 100%; display: flex; flex-direction: column; gap: 8px; }
   .history.hidden { display: none; }
+  .history-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .history-title { font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .history-all {
+    background: transparent; border: none; color: var(--accent2);
+    font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 2px 4px;
+  }
+  .history-all:hover { color: var(--gold); }
   .history-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border-radius: 6px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
+    font-size: 1.1rem; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 6px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    cursor: pointer; transition: transform 0.12s, border-color 0.2s;
   }
+  .chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .chip:active { transform: translateY(0); }
   .chip.muted { color: var(--muted); border-style: dashed; }
   .chip.last { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
 
@@ -342,28 +314,17 @@
     color: var(--text);
     font-size: 1rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.7; transition: opacity 0.2s;
   }
   .mute-btn:hover { opacity: 1; }
 
   /* RESULTADO EM TELA CHEIA */
   .result-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
+    position: fixed; inset: 0; z-index: 50;
     background: rgba(8,8,12,0.97);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 24px;
-    text-align: center;
-    cursor: pointer;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 24px; text-align: center; cursor: pointer;
   }
   .result-overlay.show { display: flex; animation: roFade 0.25s ease; }
   .ro-label { font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
@@ -372,16 +333,52 @@
     font-size: clamp(6rem, 42vw, 16rem);
     line-height: 1;
     background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     filter: drop-shadow(0 0 40px rgba(255,150,0,0.4));
     animation: roPop 0.45s cubic-bezier(0.34,1.56,0.64,1);
   }
-  .ro-meta { font-size: 0.8rem; color: var(--muted); letter-spacing: 1px; }
+  .ro-meta { font-size: 0.85rem; color: var(--muted); letter-spacing: 1px; }
   .ro-hint { margin-top: 18px; font-size: 0.72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; }
   @keyframes roFade { from { opacity: 0; } to { opacity: 1; } }
   @keyframes roPop  { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* LISTA "VER TODOS" */
+  .list-overlay {
+    position: fixed; inset: 0; z-index: 52;
+    background: rgba(8,8,12,0.9);
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .list-overlay.show { display: flex; animation: roFade 0.2s ease; }
+  .list-card {
+    width: 100%; max-width: 420px;
+    max-height: 80vh;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .list-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px; border-bottom: 1px solid var(--border);
+  }
+  .list-head .lh-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; }
+  .list-head button {
+    background: transparent; border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 6px 12px; font-size: 0.7rem; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .list-head button:hover { border-color: var(--accent); }
+  .list-body { overflow-y: auto; padding: 8px 0; }
+  .list-row {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 9px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .list-row .lr-idx { color: var(--muted); font-size: 0.72rem; min-width: 34px; }
+  .list-row .lr-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; color: var(--gold); min-width: 48px; }
+  .list-row .lr-time { margin-left: auto; color: var(--muted); font-size: 0.78rem; }
 
   /* SPARKS */
   .spark { position: fixed; pointer-events: none; border-radius: 50%; animation: sparkFly var(--dur) ease-out forwards; z-index: 51; }
@@ -400,7 +397,7 @@
   }
   .shaking { animation: shake 0.4s ease; }
 
-  /* GLOW PULSE on drum when spinning */
+  /* GLOW PULSE */
   @keyframes glowPulse {
     0%,100% { box-shadow: 0 0 0px rgba(255,77,0,0); }
     50%     { box-shadow: 0 0 40px rgba(255,77,0,0.25), inset 0 0 20px rgba(255,77,0,0.05); }
@@ -423,10 +420,21 @@
 
 <!-- Resultado em tela cheia -->
 <div class="result-overlay" id="resultOverlay" onclick="closeOverlay()">
-  <span class="ro-label">Número sorteado</span>
+  <span class="ro-label" id="roLabel">Número sorteado</span>
   <span class="ro-number" id="roNumber">—</span>
   <span class="ro-meta" id="roMeta"></span>
   <span class="ro-hint">toque para fechar</span>
+</div>
+
+<!-- Lista "ver todos" -->
+<div class="list-overlay" id="listOverlay">
+  <div class="list-card">
+    <div class="list-head">
+      <span class="lh-title" id="listTitle">Sorteados</span>
+      <button onclick="closeList()">Fechar</button>
+    </div>
+    <div class="list-body" id="listBody"></div>
+  </div>
 </div>
 
 <div class="container">
@@ -471,7 +479,10 @@
   </div>
 
   <div class="history hidden" id="history">
-    <span class="history-title" id="historyTitle"></span>
+    <div class="history-head">
+      <span class="history-title" id="historyTitle"></span>
+      <button class="history-all" id="historyAll" onclick="openList()">Ver todos</button>
+    </div>
     <div class="history-chips" id="historyChips"></div>
   </div>
 
@@ -484,13 +495,19 @@ const PADDING = ITEM_H;
 let spinning = false;
 let muted = false;
 
-/* ---------- Estado persistente (sessão) ---------- */
-let history = loadHistory();   // números já sorteados, em ordem
+/* ---------- Estado persistente (sessão) ----------
+   history: lista de { n: número, t: timestamp em ms } na ordem em que saíram */
+let history = loadHistory();
 let noRepeat = loadFlag('roleta_norepeat');
 
 function loadHistory() {
-  try { return JSON.parse(localStorage.getItem('roleta_history')) || []; }
-  catch (e) { return []; }
+  try {
+    const raw = JSON.parse(localStorage.getItem('roleta_history')) || [];
+    // migração: entradas antigas eram só o número
+    return raw.map((it) => (it && typeof it === 'object')
+      ? { n: it.n, t: it.t || null }
+      : { n: it, t: null });
+  } catch (e) { return []; }
 }
 function saveHistory() {
   try { localStorage.setItem('roleta_history', JSON.stringify(history)); } catch (e) {}
@@ -498,19 +515,27 @@ function saveHistory() {
 function loadFlag(key) {
   try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
 }
+function fmtTime(ms) {
+  if (!ms) return '';
+  try {
+    return new Date(ms).toLocaleString('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+  } catch (e) { return ''; }
+}
 
-/* ---------- Aleatoriedade uniforme e imprevisível (crypto) ---------- */
+/* ---------- Aleatoriedade uniforme (crypto) ---------- */
 function randInt(n) {
   if (n <= 1) return 0;
-  const MAX = 4294967296;            // 2^32
-  const limit = MAX - (MAX % n);     // rejection sampling: zero viés
+  const MAX = 4294967296;
+  const limit = MAX - (MAX % n);
   const buf = new Uint32Array(1);
   let x;
   do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= limit);
   return x % n;
 }
 
-/* ---------- Áudio (Web Audio API) ---------- */
+/* ---------- Áudio ---------- */
 let audioCtx = null;
 function ensureAudio() {
   if (!audioCtx) {
@@ -689,18 +714,15 @@ async function startSpin() {
   }
   if (max - min > 9999) { errorEl.textContent = 'Intervalo máximo: 10.000 números.'; return; }
 
-  // Monta o bolo de números disponíveis (respeitando "não repetir")
   let pool;
   if (noRepeat) {
-    const drawnSet = new Set(history);
+    const drawnSet = new Set(history.map((h) => h.n));
     pool = [];
     for (let v = min; v <= max; v++) if (!drawnSet.has(v)) pool.push(v);
     if (pool.length === 0) {
       errorEl.textContent = 'Todos os números já saíram. Toque em Reiniciar.';
       return;
     }
-  } else {
-    pool = null; // não precisa materializar; sorteia direto no intervalo
   }
 
   const target = noRepeat ? pool[randInt(pool.length)] : (min + randInt(max - min + 1));
@@ -712,38 +734,33 @@ async function startSpin() {
 
   const drumWrap = document.getElementById('drumWrap');
 
-  // Fase 1 — rufar dos tambores
   drumWrap.classList.add('drumroll');
   playDrumroll(1.1);
   await wait(1150);
   drumWrap.classList.remove('drumroll');
 
-  // Fase 2 — manivela
   await pullLever();
-
-  // Fase 3 — rolagem
   await runReel(min, max, target);
 
-  // Registra no histórico da sessão
-  history.push(target);
+  const when = Date.now();
+  history.push({ n: target, t: when });
   saveHistory();
   renderHistory();
-  showOverlay(target);
+  showOverlay(target, when, false);
 
   spinning = false;
   btn.disabled = false;
 }
 
 /* ---------- Resultado em tela cheia ---------- */
-function showOverlay(num) {
+// review=true quando é uma reabertura pelo histórico
+function showOverlay(num, ms, review) {
   document.getElementById('roNumber').textContent = num;
-  let stamp = '';
-  try {
-    stamp = new Date().toLocaleString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-    });
-  } catch (e) {}
-  document.getElementById('roMeta').textContent = stamp;
+  document.getElementById('roLabel').textContent = review ? 'Já sorteado' : 'Número sorteado';
+  const meta = fmtTime(ms);
+  document.getElementById('roMeta').textContent = review
+    ? (meta ? 'saiu em ' + meta : 'horário não registrado')
+    : meta;
   document.getElementById('resultOverlay').classList.add('show');
 }
 function closeOverlay() {
@@ -757,22 +774,45 @@ function renderHistory() {
   const titleEl = document.getElementById('historyTitle');
   if (!history.length) { wrap.classList.add('hidden'); chipsEl.innerHTML = ''; return; }
   wrap.classList.remove('hidden');
-  titleEl.textContent = `Já saíram (${history.length})`;
+  titleEl.textContent = `Já saíram (${history.length}) · toque para rever`;
   const MAXCHIPS = 24;
-  const shown = history.slice(-MAXCHIPS);
+  const start = Math.max(0, history.length - MAXCHIPS);
+  const shown = history.slice(start);
   chipsEl.innerHTML = '';
-  if (history.length > MAXCHIPS) {
+  if (start > 0) {
     const more = document.createElement('span');
     more.className = 'chip muted';
-    more.textContent = `+${history.length - MAXCHIPS}`;
+    more.textContent = `+${start}`;
+    more.addEventListener('click', openList);
     chipsEl.appendChild(more);
   }
-  shown.forEach((n, i) => {
+  shown.forEach((entry, i) => {
     const c = document.createElement('span');
     c.className = 'chip' + (i === shown.length - 1 ? ' last' : '');
-    c.textContent = n;
+    c.textContent = entry.n;
+    c.addEventListener('click', () => { if (!spinning) showOverlay(entry.n, entry.t, true); });
     chipsEl.appendChild(c);
   });
+}
+
+/* ---------- Lista "ver todos" ---------- */
+function openList() {
+  const body = document.getElementById('listBody');
+  document.getElementById('listTitle').textContent = `Sorteados (${history.length})`;
+  body.innerHTML = '';
+  history.forEach((entry, i) => {
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    const idx = document.createElement('span'); idx.className = 'lr-idx'; idx.textContent = '#' + (i + 1);
+    const num = document.createElement('span'); num.className = 'lr-num'; num.textContent = entry.n;
+    const time = document.createElement('span'); time.className = 'lr-time'; time.textContent = fmtTime(entry.t) || '—';
+    row.appendChild(idx); row.appendChild(num); row.appendChild(time);
+    body.appendChild(row);
+  });
+  document.getElementById('listOverlay').classList.add('show');
+}
+function closeList() {
+  document.getElementById('listOverlay').classList.remove('show');
 }
 
 /* ---------- Controles ---------- */
@@ -819,17 +859,19 @@ function fireSparks() {
   el.addEventListener('focus', () => setTimeout(() => el.select(), 0));
 });
 
-// Restaura estado salvo
+// Fecha a lista ao tocar fora do card
+document.getElementById('listOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('listOverlay')) closeList();
+});
+
 document.getElementById('noRepeat').checked = noRepeat;
 document.getElementById('noRepeatLabel').classList.toggle('on', noRepeat);
 renderHistory();
 
-// Preview inicial no tambor
 buildDrum([1, 2, 3, 4, 5]);
 document.getElementById('drumTrack').style.top = `${PADDING}px`;
 document.querySelector('.drum-item').classList.add('active');
 
-// Service Worker (PWA)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch((err) => console.warn('SW falhou:', err));
