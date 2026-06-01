@@ -78,7 +78,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 3rem;
     letter-spacing: 4px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--gold) 100%);
+    background: linear-gradient(135deg, #c4c4ce 0%, #ffffff 55%, #ffffff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -327,17 +327,17 @@
 
   <div class="header">
     <h1>MIROMI</h1>
-    <p>Roleta de sorteio</p>
+    <p>Roleta</p>
   </div>
 
   <div class="inputs-row">
     <div class="input-group">
       <label>De</label>
-      <input type="number" id="minVal" value="1" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="minVal" value="1" min="0">
     </div>
     <div class="input-group">
       <label>Até</label>
-      <input type="number" id="maxVal" value="100" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="maxVal" value="100" min="0">
     </div>
   </div>
 
