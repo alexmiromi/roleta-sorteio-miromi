@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roleta de Sorteio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --border: #1e1e2e;
+    --accent: #ff4d00;
+    --accent2: #ff9500;
+    --gold: #ffd700;
+    --text: #e8e8f0;
+    --muted: #555570;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Background glow */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(255,77,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .header p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* INPUTS */
+  .inputs-row {
+    display: flex;
+    gap: 14px;
+    width: 100%;
+  }
+  .input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .input-group label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .input-group input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    text-align: center;
+    padding: 10px 8px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    -moz-appearance: textfield;
+  }
+  .input-group input::-webkit-inner-spin-button,
+  .input-group input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .input-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(255,77,0,0.15);
+  }
+
+  /* DRUM DISPLAY */
+  .drum-wrap {
+    width: 100%;
+    position: relative;
+  }
+
+  .drum-outer {
+    width: 100%;
+    height: 130px;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* scanlines */
+  .drum-outer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.18) 3px,
+      rgba(0,0,0,0.18) 4px
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* center highlight strip */
+  .drum-outer::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 52px;
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    background: rgba(255,77,0,0.06);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* fade top/bottom */
+  .drum-fade {
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .drum-fade.top    { top: 0;    height: 40px; background: linear-gradient(to bottom, var(--surface), transparent); }
+  .drum-fade.bottom { bottom: 0; height: 40px; background: linear-gradient(to top,   var(--surface), transparent); }
+
+  .drum-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 0; right: 0;
+    top: 0;
+  }
+
+  .drum-item {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color 0.1s;
+    user-select: none;
+  }
+  .drum-item.active {
+    color: var(--text);
+    text-shadow: 0 0 20px rgba(255,77,0,0.6);
+  }
+
+  /* RESULT FLASH */
+  .result-display {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    animation: resultPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .result-display.visible { display: flex; }
+  .result-label {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .result-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    filter: drop-shadow(0 0 30px rgba(255,150,0,0.4));
+  }
+
+  @keyframes resultPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  /* BUTTON */
+  .spin-btn {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 24px rgba(255,77,0,0.3);
+  }
+  .spin-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
+  }
+  .spin-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(255,77,0,0.45);
+  }
+  .spin-btn:active:not(:disabled) { transform: translateY(0); }
+  .spin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ERROR */
+  .error-msg {
+    font-size: 0.75rem;
+    color: #ff4d4d;
+    letter-spacing: 1px;
+    min-height: 16px;
+    text-align: center;
+  }
+
+  /* SPARKS */
+  .spark {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: sparkFly var(--dur) ease-out forwards;
+    z-index: 10;
+  }
+  @keyframes sparkFly {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* SHAKE */
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-6px); }
+    40%     { transform: translateX(6px); }
+    60%     { transform: translateX(-4px); }
+    80%     { transform: translateX(4px); }
+  }
+  .shaking { animation: shake 0.4s ease; }
+
+  /* GLOW PULSE on drum when spinning */
+  @keyframes glowPulse {
+    0%,100% { box-shadow: 0 0 0px rgba(255,77,0,0); }
+    50%     { box-shadow: 0 0 40px rgba(255,77,0,0.25), inset 0 0 20px rgba(255,77,0,0.05); }
+  }
+  .drum-outer.spinning { animation: glowPulse 0.3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>MIROMI</h1>
+    <p>Roleta de sorteio</p>
+  </div>
+
+  <div class="inputs-row">
+    <div class="input-group">
+      <label>De</label>
+      <input type="number" id="minVal" value="1" min="0">
+    </div>
+    <div class="input-group">
+      <label>Até</label>
+      <input type="number" id="maxVal" value="100" min="0">
+    </div>
+  </div>
+
+  <div class="drum-wrap">
+    <div class="drum-outer" id="drumOuter">
+      <div class="drum-fade top"></div>
+      <div class="drum-fade bottom"></div>
+      <div class="drum-track" id="drumTrack"></div>
+    </div>
+  </div>
+
+  <div class="result-display" id="resultDisplay">
+    <span class="result-label">Número sorteado</span>
+    <span class="result-number" id="resultNumber">—</span>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <button class="spin-btn" id="spinBtn" onclick="startSpin()">
+    GIRAR
+  </button>
+
+</div>
+
+<script>
+const ITEM_H = 44;
+const VISIBLE = 3; // items visíveis (top, center, bottom)
+const PADDING = ITEM_H; // 1 item de padding pra dar o efeito de scroll
+
+let spinning = false;
+
+function buildDrum(numbers) {
+  const track = document.getElementById('drumTrack');
+  track.innerHTML = '';
+  numbers.forEach((n, i) => {
+    const div = document.createElement('div');
+    div.className = 'drum-item';
+    div.textContent = n;
+    div.dataset.index = i;
+    track.appendChild(div);
+  });
+}
+
+function setActiveIndex(track, idx) {
+  const items = track.querySelectorAll('.drum-item');
+  items.forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+}
+
+function easeOut(t) {
+  return 1 - Math.pow(1 - t, 4);
+}
+
+function startSpin() {
+  if (spinning) return;
+
+  const errorEl = document.getElementById('errorMsg');
+  errorEl.textContent = '';
+
+  const min = parseInt(document.getElementById('minVal').value);
+  const max = parseInt(document.getElementById('maxVal').value);
+
+  if (isNaN(min) || isNaN(max)) {
+    errorEl.textContent = 'Preencha os dois campos.';
+    return;
+  }
+  if (min >= max) {
+    errorEl.textContent = 'O valor inicial deve ser menor que o final.';
+    document.querySelector('.inputs-row').classList.add('shaking');
+    setTimeout(() => document.querySelector('.inputs-row').classList.remove('shaking'), 400);
+    return;
+  }
+  if (max - min > 9999) {
+    errorEl.textContent = 'Intervalo máximo: 10.000 números.';
+    return;
+  }
+
+  // Esconde resultado anterior
+  document.getElementById('resultDisplay').classList.remove('visible');
+
+  const range = [];
+  for (let i = min; i <= max; i++) range.push(i);
+
+  const target = range[Math.floor(Math.random() * range.length)];
+
+  // Monta lista longa para scroll: prefixo aleatório + target no fim
+  const spinCount = 40 + Math.floor(Math.random() * 20); // quantos itens antes do destino
+  const spinList = [];
+  for (let i = 0; i < spinCount; i++) {
+    spinList.push(range[Math.floor(Math.random() * range.length)]);
+  }
+  spinList.push(target);
+  // adiciona 1 item depois pra completar visual
+  spinList.push(range[Math.floor(Math.random() * range.length)]);
+
+  buildDrum(spinList);
+
+  const track = document.getElementById('drumTrack');
+  const drum = document.getElementById('drumOuter');
+  const btn = document.getElementById('spinBtn');
+
+  // Posição inicial: centraliza no índice 0
+  const startOffset = PADDING; // inicia no índice 0 centralizado
+  // Posição alvo: centraliza no item "target" (index = spinCount)
+  const targetIndex = spinCount;
+  const endOffset = -(targetIndex * ITEM_H) + PADDING;
+
+  // Posiciona drum no começo
+  track.style.transition = 'none';
+  track.style.top = `${startOffset}px`;
+  setActiveIndex(track, 0);
+
+  drum.classList.add('spinning');
+  btn.disabled = true;
+  spinning = true;
+
+  const duration = 3200 + Math.random() * 800; // 3.2–4s
+  let startTime = null;
+
+  const totalDistance = startOffset - endOffset; // px a percorrer
+
+  function tick(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOut(progress);
+
+    const currentTop = startOffset - totalDistance * eased;
+    track.style.top = `${currentTop}px`;
+
+    // Qual índice está no centro agora?
+    const centeredIndex = Math.round((PADDING - currentTop) / ITEM_H);
+    const clamped = Math.max(0, Math.min(spinList.length - 1, centeredIndex));
+    setActiveIndex(track, clamped);
+
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      // FIM
+      track.style.top = `${endOffset}px`;
+      setActiveIndex(track, targetIndex);
+      drum.classList.remove('spinning');
+      spinning = false;
+      btn.disabled = false;
+
+      // Mostra resultado
+      document.getElementById('resultNumber').textContent = target;
+      document.getElementById('resultDisplay').classList.add('visible');
+
+      // Centelhas
+      fireSparks();
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function fireSparks() {
+  const colors = ['#ff4d00','#ff9500','#ffd700','#fff','#ff6a00'];
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight * 0.55;
+
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('div');
+    el.className = 'spark';
+    const size = 4 + Math.random() * 8;
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 80 + Math.random() * 180;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist - 60;
+    const dur = 0.5 + Math.random() * 0.6;
+    el.style.cssText = `
+      left: ${cx}px; top: ${cy}px;
+      width: ${size}px; height: ${size}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      --tx: ${tx}px; --ty: ${ty}px;
+      --dur: ${dur}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), dur * 1000 + 100);
+  }
+}
+
+// Inicializa com números de 1 a 5 como preview
+buildDrum([1, 2, 3, 4, 5]);
+document.getElementById('drumTrack').style.top = `${PADDING}px`;
+document.querySelector('.drum-item').classList.add('active');
+</script>
+</body>
+</html>
