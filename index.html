@@ -37,12 +37,8 @@
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
     position: relative;
+    overflow-x: hidden;
   }
 
   /* Background glow */
@@ -61,19 +57,20 @@
   .container {
     width: 100%;
     max-width: 480px;
-    padding: 24px 20px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: calc(env(safe-area-inset-top, 0px) + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    justify-content: center;
+    gap: 24px;
     position: relative;
     z-index: 1;
   }
 
   /* HEADER */
-  .header {
-    text-align: center;
-  }
+  .header { text-align: center; }
   .header h1 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 3rem;
@@ -93,17 +90,8 @@
   }
 
   /* INPUTS */
-  .inputs-row {
-    display: flex;
-    gap: 14px;
-    width: 100%;
-  }
-  .input-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .inputs-row { display: flex; gap: 14px; width: 100%; }
+  .input-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
   .input-group label {
     font-size: 0.7rem;
     letter-spacing: 2px;
@@ -133,11 +121,7 @@
   }
 
   /* DRUM DISPLAY */
-  .drum-wrap {
-    width: 100%;
-    position: relative;
-  }
-
+  .drum-wrap { width: 100%; position: relative; }
   .drum-outer {
     width: 100%;
     height: 130px;
@@ -148,24 +132,14 @@
     position: relative;
     transition: box-shadow 0.2s;
   }
-
-  /* scanlines */
   .drum-outer::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0,0,0,0.18) 3px,
-      rgba(0,0,0,0.18) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px);
     z-index: 3;
     pointer-events: none;
   }
-
-  /* center highlight strip */
   .drum-outer::after {
     content: '';
     position: absolute;
@@ -179,26 +153,10 @@
     z-index: 2;
     pointer-events: none;
   }
-
-  /* fade top/bottom */
-  .drum-fade {
-    position: absolute;
-    left: 0; right: 0;
-    z-index: 4;
-    pointer-events: none;
-  }
+  .drum-fade { position: absolute; left: 0; right: 0; z-index: 4; pointer-events: none; }
   .drum-fade.top    { top: 0;    height: 40px; background: linear-gradient(to bottom, var(--surface), transparent); }
   .drum-fade.bottom { bottom: 0; height: 40px; background: linear-gradient(to top,   var(--surface), transparent); }
-
-  .drum-track {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    left: 0; right: 0;
-    top: 0;
-  }
-
+  .drum-track { display: flex; flex-direction: column; align-items: center; position: absolute; left: 0; right: 0; top: 0; }
   .drum-item {
     height: 44px;
     display: flex;
@@ -212,11 +170,7 @@
     transition: color 0.1s;
     user-select: none;
   }
-  .drum-item.active {
-    color: var(--text);
-    text-shadow: 0 0 20px rgba(255,77,0,0.6);
-  }
-  /* número vencedor (resultado final, dentro do tambor) */
+  .drum-item.active { color: var(--text); text-shadow: 0 0 20px rgba(255,77,0,0.6); }
   .drum-item.won {
     color: var(--gold);
     text-shadow: 0 0 30px rgba(255,200,0,0.85), 0 0 12px rgba(255,120,0,0.6);
@@ -224,7 +178,7 @@
     transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), color 0.2s, text-shadow 0.2s;
   }
 
-  /* RUFAR DOS TAMBORES (suspense) */
+  /* RUFAR DOS TAMBORES */
   @keyframes drumrollShake {
     0%,100% { transform: translate(0,0); }
     20%     { transform: translate(-2px,1px); }
@@ -233,11 +187,9 @@
     80%     { transform: translate(1px,1px); }
   }
   .drum-wrap.drumroll { animation: drumrollShake 0.07s linear infinite; }
-  .drum-wrap.drumroll .drum-outer {
-    box-shadow: 0 0 34px rgba(255,77,0,0.4), inset 0 0 18px rgba(255,77,0,0.08);
-  }
+  .drum-wrap.drumroll .drum-outer { box-shadow: 0 0 34px rgba(255,77,0,0.4), inset 0 0 18px rgba(255,77,0,0.08); }
 
-  /* ALAVANCA / MANIVELA estilo cassino */
+  /* ALAVANCA / MANIVELA */
   .lever {
     position: fixed;
     right: 6px;
@@ -253,10 +205,8 @@
   .lever.show { opacity: 1; }
   .lever-base {
     position: absolute;
-    right: 12px;
-    bottom: 70px;
-    width: 26px;
-    height: 60px;
+    right: 12px; bottom: 70px;
+    width: 26px; height: 60px;
     border-radius: 7px;
     background: linear-gradient(#33333f, #14141c);
     border: 1px solid #3a3a48;
@@ -264,27 +214,17 @@
   }
   .lever-arm {
     position: absolute;
-    right: 22px;
-    bottom: 96px;
-    width: 10px;
-    height: 86px;
+    right: 22px; bottom: 96px;
+    width: 10px; height: 86px;
     transform-origin: 50% 100%;
     transform: rotate(-12deg);
   }
-  .lever-stick {
-    position: absolute;
-    inset: 0;
-    border-radius: 5px;
-    background: linear-gradient(90deg,#6d6d75,#e8e8ee 45%,#6d6d75);
-    box-shadow: 0 0 4px rgba(0,0,0,0.4);
-  }
+  .lever-stick { position: absolute; inset: 0; border-radius: 5px; background: linear-gradient(90deg,#6d6d75,#e8e8ee 45%,#6d6d75); box-shadow: 0 0 4px rgba(0,0,0,0.4); }
   .lever-knob {
     position: absolute;
-    left: 50%;
-    top: -16px;
+    left: 50%; top: -16px;
     transform: translateX(-50%);
-    width: 34px;
-    height: 34px;
+    width: 34px; height: 34px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #ff8a6a, #e51f1f 55%, #9c0000 100%);
     box-shadow: 0 3px 10px rgba(0,0,0,0.55), inset 0 -3px 6px rgba(0,0,0,0.3);
@@ -307,30 +247,87 @@
     transition: transform 0.15s, box-shadow 0.15s;
     box-shadow: 0 4px 24px rgba(255,77,0,0.3);
   }
-  .spin-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
-  }
-  .spin-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(255,77,0,0.45);
-  }
+  .spin-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent); }
+  .spin-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,77,0,0.45); }
   .spin-btn:active:not(:disabled) { transform: translateY(0); }
-  .spin-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* ERROR */
-  .error-msg {
-    font-size: 0.75rem;
-    color: #ff4d4d;
-    letter-spacing: 1px;
-    min-height: 16px;
-    text-align: center;
+  .error-msg { font-size: 0.75rem; color: #ff4d4d; letter-spacing: 1px; min-height: 16px; text-align: center; }
+
+  /* CONTROLES (não repetir + reiniciar) */
+  .controls-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
+  .switch {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .switch input { display: none; }
+  .switch .track {
+    width: 42px; height: 24px;
+    border-radius: 12px;
+    background: var(--border);
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .switch .track::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #777;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .switch input:checked + .track { background: var(--accent); }
+  .switch input:checked + .track::after { transform: translateX(18px); background: #fff; }
+  .switch.on { color: var(--text); }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .reset-btn:hover { color: var(--text); border-color: var(--accent); }
+
+  /* HISTÓRICO */
+  .history { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+  .history.hidden { display: none; }
+  .history-title { font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .history-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .chip.muted { color: var(--muted); border-style: dashed; }
+  .chip.last { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
 
   /* MUTE */
   .mute-btn {
@@ -338,8 +335,7 @@
     top: calc(env(safe-area-inset-top, 0px) + 22px);
     right: calc(env(safe-area-inset-right, 0px) + 14px);
     z-index: 40;
-    width: 38px;
-    height: 38px;
+    width: 38px; height: 38px;
     border-radius: 50%;
     border: 1px solid var(--border);
     background: var(--surface);
@@ -354,14 +350,41 @@
   }
   .mute-btn:hover { opacity: 1; }
 
-  /* SPARKS */
-  .spark {
+  /* RESULTADO EM TELA CHEIA */
+  .result-overlay {
     position: fixed;
-    pointer-events: none;
-    border-radius: 50%;
-    animation: sparkFly var(--dur) ease-out forwards;
-    z-index: 10;
+    inset: 0;
+    z-index: 50;
+    background: rgba(8,8,12,0.97);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
   }
+  .result-overlay.show { display: flex; animation: roFade 0.25s ease; }
+  .ro-label { font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
+  .ro-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(6rem, 42vw, 16rem);
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 40px rgba(255,150,0,0.4));
+    animation: roPop 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .ro-meta { font-size: 0.8rem; color: var(--muted); letter-spacing: 1px; }
+  .ro-hint { margin-top: 18px; font-size: 0.72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; }
+  @keyframes roFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes roPop  { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* SPARKS */
+  .spark { position: fixed; pointer-events: none; border-radius: 50%; animation: sparkFly var(--dur) ease-out forwards; z-index: 51; }
   @keyframes sparkFly {
     0%   { transform: translate(0,0) scale(1); opacity: 1; }
     100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
@@ -398,6 +421,14 @@
   </div>
 </div>
 
+<!-- Resultado em tela cheia -->
+<div class="result-overlay" id="resultOverlay" onclick="closeOverlay()">
+  <span class="ro-label">Número sorteado</span>
+  <span class="ro-number" id="roNumber">—</span>
+  <span class="ro-meta" id="roMeta"></span>
+  <span class="ro-hint">toque para fechar</span>
+</div>
+
 <div class="container">
 
   <div class="header">
@@ -430,29 +461,56 @@
     GIRAR
   </button>
 
+  <div class="controls-row">
+    <label class="switch" id="noRepeatLabel">
+      <input type="checkbox" id="noRepeat" onchange="toggleNoRepeat()">
+      <span class="track"></span>
+      <span>Não repetir</span>
+    </label>
+    <button class="reset-btn" id="resetBtn" onclick="resetRound()">Reiniciar</button>
+  </div>
+
+  <div class="history hidden" id="history">
+    <span class="history-title" id="historyTitle"></span>
+    <div class="history-chips" id="historyChips"></div>
+  </div>
+
 </div>
 
 <script>
 const ITEM_H = 44;
-const PADDING = ITEM_H; // 1 item de padding pra dar o efeito de scroll
+const PADDING = ITEM_H;
 
 let spinning = false;
 let muted = false;
 
-/* ---------- Aleatoriedade uniforme e imprevisível (crypto) ----------
-   randInt(n) devolve 0..n-1 com probabilidade exatamente igual,
-   usando rejection sampling pra eliminar qualquer viés de módulo. */
+/* ---------- Estado persistente (sessão) ---------- */
+let history = loadHistory();   // números já sorteados, em ordem
+let noRepeat = loadFlag('roleta_norepeat');
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem('roleta_history')) || []; }
+  catch (e) { return []; }
+}
+function saveHistory() {
+  try { localStorage.setItem('roleta_history', JSON.stringify(history)); } catch (e) {}
+}
+function loadFlag(key) {
+  try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+}
+
+/* ---------- Aleatoriedade uniforme e imprevisível (crypto) ---------- */
 function randInt(n) {
   if (n <= 1) return 0;
   const MAX = 4294967296;            // 2^32
-  const limit = MAX - (MAX % n);     // descarta o "rabo" que causaria viés
+  const limit = MAX - (MAX % n);     // rejection sampling: zero viés
   const buf = new Uint32Array(1);
   let x;
   do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= limit);
   return x % n;
 }
 
-/* ---------- Áudio (Web Audio API, sintetizado) ---------- */
+/* ---------- Áudio (Web Audio API) ---------- */
 let audioCtx = null;
 function ensureAudio() {
   if (!audioCtx) {
@@ -462,87 +520,61 @@ function ensureAudio() {
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
-
-// Rufar dos tambores: ruído filtrado com tremolo que acelera + crescendo
 function playDrumroll(duration) {
   const ctx = ensureAudio();
   if (!ctx || muted) return;
   const now = ctx.currentTime;
-
   const size = Math.floor(ctx.sampleRate * 0.5);
   const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < size; i++) data[i] = Math.random() * 2 - 1;
-
   const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-  noise.loop = true;
-
+  noise.buffer = buffer; noise.loop = true;
   const band = ctx.createBiquadFilter();
-  band.type = 'bandpass';
-  band.frequency.value = 190;
-  band.Q.value = 1.1;
-
-  const trem = ctx.createGain();
-  trem.gain.value = 0.5;
-  const lfo = ctx.createOscillator();
-  lfo.type = 'square';
+  band.type = 'bandpass'; band.frequency.value = 190; band.Q.value = 1.1;
+  const trem = ctx.createGain(); trem.gain.value = 0.5;
+  const lfo = ctx.createOscillator(); lfo.type = 'square';
   lfo.frequency.setValueAtTime(13, now);
-  lfo.frequency.linearRampToValueAtTime(34, now + duration); // rufar acelera
-  const lfoGain = ctx.createGain();
-  lfoGain.gain.value = 0.5;
+  lfo.frequency.linearRampToValueAtTime(34, now + duration);
+  const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.5;
   lfo.connect(lfoGain).connect(trem.gain);
-
   const master = ctx.createGain();
   master.gain.setValueAtTime(0.0001, now);
   master.gain.exponentialRampToValueAtTime(0.45, now + duration * 0.85);
   master.gain.linearRampToValueAtTime(0.55, now + duration);
-
   noise.connect(band).connect(trem).connect(master).connect(ctx.destination);
-  noise.start(now);
-  lfo.start(now);
-  noise.stop(now + duration + 0.05);
-  lfo.stop(now + duration + 0.05);
+  noise.start(now); lfo.start(now);
+  noise.stop(now + duration + 0.05); lfo.stop(now + duration + 0.05);
 }
-
-// "Ka-chunk" da alavanca
 function playClunk() {
   const ctx = ensureAudio();
   if (!ctx || muted) return;
   const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  osc.type = 'square';
+  const osc = ctx.createOscillator(); osc.type = 'square';
   osc.frequency.setValueAtTime(150, now);
   osc.frequency.exponentialRampToValueAtTime(45, now + 0.13);
   const g = ctx.createGain();
   g.gain.setValueAtTime(0.5, now);
   g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
   osc.connect(g).connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + 0.22);
+  osc.start(now); osc.stop(now + 0.22);
 }
-
-// Fanfarra curta ao revelar o número
 function playWin() {
   const ctx = ensureAudio();
   if (!ctx || muted) return;
   const now = ctx.currentTime;
-  const freqs = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+  const freqs = [523.25, 659.25, 783.99, 1046.5];
   freqs.forEach((f, i) => {
-    const osc = ctx.createOscillator();
-    osc.type = 'triangle';
-    osc.frequency.value = f;
+    const osc = ctx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = f;
     const g = ctx.createGain();
     const t = now + i * 0.09;
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
     g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
     osc.connect(g).connect(ctx.destination);
-    osc.start(t);
-    osc.stop(t + 0.5);
+    osc.start(t); osc.stop(t + 0.5);
   });
 }
-
 function toggleMute() {
   muted = !muted;
   document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
@@ -560,18 +592,13 @@ function buildDrum(numbers) {
     track.appendChild(div);
   });
 }
-
 function setActiveIndex(track, idx) {
-  const items = track.querySelectorAll('.drum-item');
-  items.forEach((el, i) => { el.classList.toggle('active', i === idx); });
+  track.querySelectorAll('.drum-item').forEach((el, i) => el.classList.toggle('active', i === idx));
 }
-
 function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
 /* ---------- Manivela ---------- */
-// Mostra e puxa a alavanca. Resolve no exato momento em que ela
-// chega embaixo (o "ka-chunk"), pra rolagem começar na hora certa.
 function pullLever() {
   return new Promise((resolve) => {
     const lever = document.getElementById('lever');
@@ -584,36 +611,27 @@ function pullLever() {
         { transform: 'rotate(-92deg)',  offset: 0.62 },
         { transform: 'rotate(-12deg)' }
       ], { duration: 1000, easing: 'ease-in-out' });
-
       let done = false;
-      setTimeout(() => {
-        playClunk();
-        if (!done) { done = true; resolve(); }
-      }, 520);
-
+      setTimeout(() => { playClunk(); if (!done) { done = true; resolve(); } }, 520);
       anim.onfinish = () => { lever.classList.remove('show'); };
     }, 240);
   });
 }
 
 /* ---------- Rolagem ---------- */
-function runReel(min, max) {
+function runReel(min, max, target) {
   return new Promise((resolve) => {
     const n = max - min + 1;
-    const target = min + randInt(n);            // <- sorteio justo (crypto)
-
-    // Lista visual: vários aleatórios + o alvo no fim
     const spinCount = 40 + randInt(20);
     const spinList = [];
     for (let i = 0; i < spinCount; i++) spinList.push(min + randInt(n));
     spinList.push(target);
-    spinList.push(min + randInt(n)); // 1 item depois, só pro visual
+    spinList.push(min + randInt(n));
 
     buildDrum(spinList);
 
     const track = document.getElementById('drumTrack');
     const drum = document.getElementById('drumOuter');
-
     const startOffset = PADDING;
     const targetIndex = spinCount;
     const endOffset = -(targetIndex * ITEM_H) + PADDING;
@@ -621,32 +639,25 @@ function runReel(min, max) {
     track.style.transition = 'none';
     track.style.top = `${startOffset}px`;
     setActiveIndex(track, 0);
-
     drum.classList.add('spinning');
 
-    const duration = 3200 + Math.random() * 800; // 3.2–4s (só estética)
+    const duration = 3200 + Math.random() * 800;
     let startTime = null;
     const totalDistance = startOffset - endOffset;
 
     function tick(ts) {
       if (!startTime) startTime = ts;
-      const elapsed = ts - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min((ts - startTime) / duration, 1);
       const eased = easeOut(progress);
-
       const currentTop = startOffset - totalDistance * eased;
       track.style.top = `${currentTop}px`;
-
       const centeredIndex = Math.round((PADDING - currentTop) / ITEM_H);
-      const clamped = Math.max(0, Math.min(spinList.length - 1, centeredIndex));
-      setActiveIndex(track, clamped);
-
+      setActiveIndex(track, Math.max(0, Math.min(spinList.length - 1, centeredIndex)));
       if (progress < 1) {
         requestAnimationFrame(tick);
       } else {
         track.style.top = `${endOffset}px`;
         setActiveIndex(track, targetIndex);
-        // realça o vencedor dentro do próprio tambor
         const items = track.querySelectorAll('.drum-item');
         if (items[targetIndex]) items[targetIndex].classList.add('won');
         drum.classList.remove('spinning');
@@ -669,49 +680,119 @@ async function startSpin() {
   const min = parseInt(document.getElementById('minVal').value);
   const max = parseInt(document.getElementById('maxVal').value);
 
-  if (isNaN(min) || isNaN(max)) {
-    errorEl.textContent = 'Preencha os dois campos.';
-    return;
-  }
+  if (isNaN(min) || isNaN(max)) { errorEl.textContent = 'Preencha os dois campos.'; return; }
   if (min >= max) {
     errorEl.textContent = 'O valor inicial deve ser menor que o final.';
     document.querySelector('.inputs-row').classList.add('shaking');
     setTimeout(() => document.querySelector('.inputs-row').classList.remove('shaking'), 400);
     return;
   }
-  if (max - min > 9999) {
-    errorEl.textContent = 'Intervalo máximo: 10.000 números.';
-    return;
+  if (max - min > 9999) { errorEl.textContent = 'Intervalo máximo: 10.000 números.'; return; }
+
+  // Monta o bolo de números disponíveis (respeitando "não repetir")
+  let pool;
+  if (noRepeat) {
+    const drawnSet = new Set(history);
+    pool = [];
+    for (let v = min; v <= max; v++) if (!drawnSet.has(v)) pool.push(v);
+    if (pool.length === 0) {
+      errorEl.textContent = 'Todos os números já saíram. Toque em Reiniciar.';
+      return;
+    }
+  } else {
+    pool = null; // não precisa materializar; sorteia direto no intervalo
   }
+
+  const target = noRepeat ? pool[randInt(pool.length)] : (min + randInt(max - min + 1));
 
   spinning = true;
   const btn = document.getElementById('spinBtn');
   btn.disabled = true;
-  ensureAudio(); // destrava áudio no gesto do clique
+  ensureAudio();
 
   const drumWrap = document.getElementById('drumWrap');
 
-  // Fase 1 — rufar dos tambores (suspense)
+  // Fase 1 — rufar dos tambores
   drumWrap.classList.add('drumroll');
   playDrumroll(1.1);
   await wait(1150);
   drumWrap.classList.remove('drumroll');
 
-  // Fase 2 — manivela de cassino
+  // Fase 2 — manivela
   await pullLever();
 
   // Fase 3 — rolagem
-  await runReel(min, max);
+  await runReel(min, max, target);
+
+  // Registra no histórico da sessão
+  history.push(target);
+  saveHistory();
+  renderHistory();
+  showOverlay(target);
 
   spinning = false;
   btn.disabled = false;
 }
 
+/* ---------- Resultado em tela cheia ---------- */
+function showOverlay(num) {
+  document.getElementById('roNumber').textContent = num;
+  let stamp = '';
+  try {
+    stamp = new Date().toLocaleString('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+  } catch (e) {}
+  document.getElementById('roMeta').textContent = stamp;
+  document.getElementById('resultOverlay').classList.add('show');
+}
+function closeOverlay() {
+  document.getElementById('resultOverlay').classList.remove('show');
+}
+
+/* ---------- Histórico ---------- */
+function renderHistory() {
+  const wrap = document.getElementById('history');
+  const chipsEl = document.getElementById('historyChips');
+  const titleEl = document.getElementById('historyTitle');
+  if (!history.length) { wrap.classList.add('hidden'); chipsEl.innerHTML = ''; return; }
+  wrap.classList.remove('hidden');
+  titleEl.textContent = `Já saíram (${history.length})`;
+  const MAXCHIPS = 24;
+  const shown = history.slice(-MAXCHIPS);
+  chipsEl.innerHTML = '';
+  if (history.length > MAXCHIPS) {
+    const more = document.createElement('span');
+    more.className = 'chip muted';
+    more.textContent = `+${history.length - MAXCHIPS}`;
+    chipsEl.appendChild(more);
+  }
+  shown.forEach((n, i) => {
+    const c = document.createElement('span');
+    c.className = 'chip' + (i === shown.length - 1 ? ' last' : '');
+    c.textContent = n;
+    chipsEl.appendChild(c);
+  });
+}
+
+/* ---------- Controles ---------- */
+function toggleNoRepeat() {
+  noRepeat = document.getElementById('noRepeat').checked;
+  document.getElementById('noRepeatLabel').classList.toggle('on', noRepeat);
+  try { localStorage.setItem('roleta_norepeat', noRepeat ? '1' : '0'); } catch (e) {}
+}
+function resetRound() {
+  if (history.length && !confirm('Reiniciar a rodada? Isso apaga os números já sorteados.')) return;
+  history = [];
+  saveHistory();
+  renderHistory();
+  document.getElementById('errorMsg').textContent = '';
+}
+
 function fireSparks() {
   const colors = ['#ff4d00','#ff9500','#ffd700','#fff','#ff6a00'];
   const cx = window.innerWidth / 2;
-  const cy = window.innerHeight * 0.55;
-
+  const cy = window.innerHeight * 0.5;
   for (let i = 0; i < 28; i++) {
     const el = document.createElement('div');
     el.className = 'spark';
@@ -725,8 +806,7 @@ function fireSparks() {
       left: ${cx}px; top: ${cy}px;
       width: ${size}px; height: ${size}px;
       background: ${colors[Math.floor(Math.random() * colors.length)]};
-      --tx: ${tx}px; --ty: ${ty}px;
-      --dur: ${dur}s;
+      --tx: ${tx}px; --ty: ${ty}px; --dur: ${dur}s;
     `;
     document.body.appendChild(el);
     setTimeout(() => el.remove(), dur * 1000 + 100);
@@ -734,11 +814,15 @@ function fireSparks() {
 }
 
 /* ---------- Inicialização ---------- */
-// Ao focar um campo, seleciona tudo: basta digitar pra substituir o valor
 ['minVal', 'maxVal'].forEach((id) => {
   const el = document.getElementById(id);
   el.addEventListener('focus', () => setTimeout(() => el.select(), 0));
 });
+
+// Restaura estado salvo
+document.getElementById('noRepeat').checked = noRepeat;
+document.getElementById('noRepeatLabel').classList.toggle('on', noRepeat);
+renderHistory();
 
 // Preview inicial no tambor
 buildDrum([1, 2, 3, 4, 5]);
@@ -748,9 +832,7 @@ document.querySelector('.drum-item').classList.add('active');
 // Service Worker (PWA)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch((err) =>
-      console.warn('SW falhou:', err)
-    );
+    navigator.serviceWorker.register('sw.js').catch((err) => console.warn('SW falhou:', err));
   });
 }
 </script>
