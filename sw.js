@@ -1,5 +1,5 @@
 // Service Worker — Roleta Miromi
-const CACHE = 'roleta-miromi-v2';
+const CACHE = 'roleta-miromi-v3';
 const ASSETS = [
   './',
   './index.html',
